@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  height: 100%;
+}
+body {
+  @apply bg-sky-950;
+}
+
+input:checked {
+  & ~ .dotbg {
+    @apply bg-sky-600;
+  }
+  & ~ .dot {
+    @apply translate-x-full;
+  }
+}
