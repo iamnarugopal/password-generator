@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
@@ -47,6 +47,13 @@ const Home = () => {
     symbols: getRandomSymbol,
   };
 
+  function autoResize() {
+    const input = document.getElementById('passwordinput')
+    console.log(input);
+    input.style.height = 'auto';
+    input.style.height = input.scrollHeight + 'px';
+  }
+
   const onSubmit = (data) => {
     const { lowercase, numbers, symbols, uppercase, range } = data;
     if (!lowercase && !numbers && !symbols && !uppercase) {
@@ -72,6 +79,10 @@ const Home = () => {
     setValue("password", pass);
   };
 
+  useEffect(() => {
+    if(!!password) autoResize()
+  }, [password])
+
   const copyPassword = (e) => {
     e.preventDefault();
     e.target.select();
@@ -82,11 +93,11 @@ const Home = () => {
           position: toast.POSITION.BOTTOM_RIGHT,
         });
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   return (
-    <section className="py-5 flex items-center md:h-full">
+    <section className="py-5 flex items-center md:min-h-full overflow-auto">
       <div className="container mx-auto px-3">
         <div className="flex justify-center">
           <div className="w-full sm:w-2/3 md:w-2/3 lg:w-1/3">
@@ -100,13 +111,14 @@ const Home = () => {
                   </div>
                   <div className="bg-sky-800 rounded-lg p-3">
                     {!!password ? (
-                      <input
-                        type="text"
+                      <textarea
                         {...register("password", {})}
-                        className="bg-transparent text-center w-full text-2xl text-white tracking-widest outline-0 font-bold"
+                        className="resize-none bg-transparent text-center w-full text-2xl text-white tracking-widest outline-0 font-bold"
                         onClick={(e) => copyPassword(e)}
                         readOnly
-                      />
+                        rows={1}
+                        id="passwordinput"
+                      ></textarea>
                     ) : (
                       <div className="text-gray-400 text-sm tracking-widest text-white uppercase text-center">
                         Click Generate
